@@ -5,6 +5,10 @@
   "scripts": {
     "start": "SET DEBUG=loc8r:* & node ./bin/www"
   },
+  "engines": {
+   "node": ">=8.9.1",
+    "npm": ">=5.5.1"
+  },
   "dependencies": {
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
