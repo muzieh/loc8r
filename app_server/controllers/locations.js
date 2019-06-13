@@ -1,19 +1,18 @@
-const homepage = (req, res) => {
-    res.render('home', {title: "homepage"})
+const homeList = (req, res) => {
+    res.render('index', {title: 'from main.js'});
 };
 
-const details = (req, res) => {
-    res.render('details', {title: "details"})
+const locationInfo = (req, res) => {
+    res.render('index', {title: 'from main.js'});
 };
 
 const addReview = (req, res) => {
-    res.render('add_review', {title: "Add Review"})
+    res.render('index', {title: 'from main.js'});
 };
 
 
-
-module.exports = {
-    homepage,
-    details,
-    addReview
+module.exports =  {
+   homeList,
+   locationInfo,
+   addReview 
 };
