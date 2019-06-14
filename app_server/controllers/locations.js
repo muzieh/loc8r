@@ -3,11 +3,11 @@ const homeList = (req, res) => {
 };
 
 const locationInfo = (req, res) => {
-    res.render('index', {title: 'Location info'});
+    res.render('location-info', {title: 'Location info'});
 };
 
 const addReview = (req, res) => {
-    res.render('index', {title: 'Add review'});
+    res.render('new-review-form', {title: 'Add review'});
 };
 
 
