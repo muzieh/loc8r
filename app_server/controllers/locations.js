@@ -1,5 +1,11 @@
 const homeList = (req, res) => {
-    res.render('locations-list', {title: 'Home'});
+    res.render('locations-list', {
+        title: 'Loc8r - find a place to work with wifi',
+        pageHeader: {
+            title: 'Loc8r',
+            strapline: '&nbsp;Loc8r - find a place to work with wifi'
+        }
+    });
 };
 
 const locationInfo = (req, res) => {
@@ -11,8 +17,8 @@ const addReview = (req, res) => {
 };
 
 
-module.exports =  {
-   homeList,
-   locationInfo,
-   addReview 
+module.exports = {
+    homeList,
+    locationInfo,
+    addReview
 };
