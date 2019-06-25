@@ -3,7 +3,7 @@ const homeList = (req, res) => {
         title: 'Loc8r - find a place to work with wifi',
         pageHeader: {
             title: 'Loc8r',
-            strapline: '&nbsp;Loc8r - find a place to work with wifi'
+            strapline: 'Find places to work with wifi near you!'
         }
     });
 };
