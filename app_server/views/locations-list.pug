@@ -1,4 +1,5 @@
 extends layout
+include _includes/sharedHTMLfunctions
 
 block content
   .row.banner
@@ -7,42 +8,18 @@ block content
         small  #{pageHeader.strapline}
   .row
     .col-12.col-md-8
-      .card
-        .card-block
-          h4
-            a(href="/location") Starcups
-            small &nbsp
-              i.fas.fa-star
-              i.fas.fa-star
-              i.fas.fa-star
-              i.far.fa-star
-              i.far.fa-star
-            span.badge.badge-pill.badge-default.float-right 100m
-        p.address 125 High Street, Reading, RG6 1PS
-        .facilities
-          span.badge.badge-warning Hot drinks
-          span.badge.badge-warning Food
-          span.badge.badge-warning Premium wifi 
-          
-      .card
-        .card-block
-          h4
-            a(href="/location") Hot Smot 
-            small &nbsp
-              i.fas.fa-star
-              i.fas.fa-star
-              i.far.fa-star
-              i.far.fa-star
-              i.far.fa-star
-            span.badge.badge-pill.badge-default.float-right 500m
-        p.address 125 High Street, Reading, RG6 1PS
-        .facilities
-          span.badge.badge-warning Hot drinks
-          span.badge.badge-warning Food
-          span.badge.badge-warning Premium wifi 
-          span.badge.badge-warning Premium wifi 
-          
+      each location in locations
+        .card
+          .card-block
+            h4
+              a(href="/location")= location.name 
+              +outputRaiting(location.rating)
+              span.badge.badge-pill.badge-default.float-right= location.distance
+          p.address= location.address
+          .facilities
+            each facility in location.facilities
+              span.badge.badge-warning= facility
           
     .col-12.col-md-4
-      p.lead Loc8r help you find places to work when out an dabout.
+      p.lead= sideMessage
       

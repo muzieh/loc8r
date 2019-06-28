@@ -4,7 +4,29 @@ const homeList = (req, res) => {
         pageHeader: {
             title: 'Loc8r',
             strapline: 'Find places to work with wifi near you!'
-        }
+        },
+        sideMessage: 'Loc8r help you find places to work when out an doubt.',
+        locations: [
+            {
+               name: 'Starcups',
+               rating: 3,
+               address: '125 High Street, Reading, RG6 1PS',
+               distance: '100m',
+               facilities: [
+                   'Hot drinks', 'Food', 'Premium wifi'
+               ] 
+            },
+            {
+                name: 'Hot smot',
+                rating: 2,
+                address: '125 High Street, Reading, RG6 1PR',
+                distance: '500m',
+                facilities: [
+                    'Hot drinks', 'Food', 'Premium wifi', 'Pool'
+                ] 
+                
+            }
+        ]
     });
 };
 
