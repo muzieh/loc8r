@@ -6,7 +6,7 @@
     "start": "SET DEBUG=loc8r:* & node ./bin/www"
   },
   "engines": {
-   "node": ">=8.9.1",
+    "node": ">=8.9.1",
     "npm": ">=5.5.1"
   },
   "dependencies": {
@@ -15,7 +15,8 @@
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
-    "pug": "2.0.0-beta11"
+    "pug": "2.0.0-beta11",
+    "clean-css": ">=4.1.11"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
