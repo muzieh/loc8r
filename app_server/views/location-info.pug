@@ -1,20 +1,17 @@
 extends layout
+include _includes/sharedHTMLfunctions
 
 block content
     .row.banner
         .col-12
-            h1 Starcups
+            h1= location.name 
     .row
         .col-12.col-lg-9
             .row
                 .col-12.col-md-6
                     p.rating
-                        i.fas.fa-star
-                        i.fas.fa-star
-                        i.fas.fa-star
-                        i.far.fa-star
-                        i.far.fa-star
-                    p 125 High Street, Reading, RG6 1PS
+                    +outputRating(location.rating)
+                    p= location.address
                     .card.card-primary
                         .card-block
                             h2.card-title Opening hours
@@ -24,18 +21,11 @@ block content
                     .card.card-primary
                         .card-block
                             h2.card-title Facilities
-                            span.badge.badge-warning
-                                i.fa.fa-check
-                                | &nbsp;Hot drinks
-                            | &nbsp;
-                            span.badge.badge-warning
-                                i.fa.fa-check
-                                | &nbsp;Food
-                            | &nbsp;
-                            span.badge.badge-warning
-                                i.fa.fa-check
-                                | &nbsp;Premium wifi
-                            | &nbsp;
+                            each facility in location.facilities
+                                span.badge.badge-warning
+                                    i.fa.fa-check
+                                    | &nbsp; #{facility}
+                                | &nbsp;
                 .col-12.col-md-6.location-map
                     .card.card-primary
                         .card-block

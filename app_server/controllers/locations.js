@@ -31,7 +31,19 @@ const homeList = (req, res) => {
 };
 
 const locationInfo = (req, res) => {
-    res.render('location-info', {title: 'Location info'});
+    res.render('location-info',{
+        title: 'Location info',
+        location: {
+            name: 'Starcups',
+            rating: 3,
+            address: '125 High Street, Reading, RG6 1PS',
+            distance: '100m',
+            facilities: [
+                'Hot drinks', 'Food', 'Premium wifi'
+            ]
+        }
+    
+    });
 };
 
 const addReview = (req, res) => {
