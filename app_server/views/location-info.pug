@@ -10,7 +10,7 @@ block content
             .row
                 .col-12.col-md-6
                     p.rating
-                        +outputRaiting(location.rating)
+                        +outputRating(location.rating)
                     p= location.address 
                     .card.card-primary
                         .card-block
@@ -41,7 +41,7 @@ block content
                                 .row.review
                                     .col-12.no-guters.review-header
                                         span.rating
-                                            +outputRaiting(review.rating)
+                                            +outputRating(review.rating)
                                         span.reviewAuthor= review.author 
                                         small.reviewTimestamp= review.timestamp
                                     .col-12
