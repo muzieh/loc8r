@@ -64,16 +64,16 @@ const locationInfo = (req, res) => {
         reviews: [
             {
                 author: 'Marian Opania',
-                timestamp: '14 February 2017',
+                createdOn: '14 February 2017',
                 rating: 1,
-                review: 'Review 1'
+                reviewText: 'Review 1'
                 
             },
             {
                 author: 'Zieleniak',
-                timestamp: '30 July 2014',
+                createdOn: '30 July 2014',
                 rating: 2,
-                review: 'Review 2' 
+                reviewText: 'Review 2' 
             }
         ],
         sideText: {

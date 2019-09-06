@@ -45,9 +45,9 @@ block content
                                         span.rating
                                             +outputRating(review.rating)
                                         span.reviewAuthor= review.author 
-                                        small.reviewTimestamp= review.timestamp
+                                        small.reviewTimestamp= review.createdOn
                                     .col-12
-                                        p= review.review
+                                        p= review.reviewText
                                 
         .col-12.col-lg-3
             p.lead= sideText.line1
