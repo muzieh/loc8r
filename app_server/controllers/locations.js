@@ -43,7 +43,23 @@ const locationInfo = (req, res) => {
             distance: '100m',
             facilities: [
                 'Hot drinks', 'Food', 'Premium wifi'
-            ] 
+            ],
+            coords: {lat: 51.455041, lng: -0.9690884},
+            opening: [{
+                days: 'Monday - Friday',
+                opening: '7:00am',
+                closing: '7:00pm',
+                closed: false,
+            }, {
+                days: 'Saturday',
+                opening: '8:00am',
+                closing: '5:00pm',
+                closed: false,
+            }, {
+                days: 'Sunday',
+                closed: true,
+            }]
+            
         },
         reviews: [
             {

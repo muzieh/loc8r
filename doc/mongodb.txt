@@ -1,0 +1,15 @@
+docker pull mongo
+docker pull mongo:4.0.10
+docker run -d -p 27017-27019:27017-27019 --name mongodb mongo:4.0.10
+docker exec -it mongodb bash
+mongo
+show dbs
+
+use thepolyglotdeveloper
+We’re using the database thepolyglotdeveloper, but it doesn’t exist until we start creating collections and data. To create a collection with data, we can do something like this:
+
+db.people.save({ firstname: "Nic", lastname: "Raboy" })
+db.people.save({ firstname: "Maria", lastname: "Raboy" })
+With two documents created in a new people collection in our thepolyglotdeveloper database, we can query for data using something like the following:
+
+db.people.find({ firstname: "Nic" })
