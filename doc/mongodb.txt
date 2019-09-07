@@ -13,3 +13,21 @@ db.people.save({ firstname: "Maria", lastname: "Raboy" })
 With two documents created in a new people collection in our thepolyglotdeveloper database, we can query for data using something like the following:
 
 db.people.find({ firstname: "Nic" })
+
+https://whatsmylatlng.com/
+http://mygeoposition.com/
+
+db.locations.save( {   } );
+db.locations.find();
+db.locations.find().pretty();
+
+db.locations.update({name:'Starcups'}, { 
+    $push : {
+        reviews: {
+            author: 'Simon Holmes',
+            _id: ObjectId(),
+            rating: 5,
+            timestamp: new Date("Mar 12, 2017"),
+            reviewText: "What a great place."
+        }
+}});

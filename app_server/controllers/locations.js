@@ -44,7 +44,7 @@ const locationInfo = (req, res) => {
             facilities: [
                 'Hot drinks', 'Food', 'Premium wifi'
             ],
-            coords: {lat: 51.455041, lng: -0.9690884},
+            coords: {lng: -0.19112150000000838, lat: 51.4168388},
             opening: [{
                 days: 'Monday - Friday',
                 opening: '7:00am',

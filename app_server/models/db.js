@@ -3,8 +3,11 @@ const readLine = require('readline');
 require('./locations');
 
 
-const mongoDbUri = "mongodb://localhost/Loc8r";
-mongoose.connect(mongoDbUri, {useNewUrlParser: true});
+let dbUri = "mongodb://localhost/Loc8r";
+if(process.env.NODE_ENV === 'production') {
+    dbUri = process.env.MLAB_URI; 
+}
+mongoose.connect(dbUri, {useNewUrlParser: true});
 
 if(process.platform === 'win32'){
    const rl = readLine.createInterface({
@@ -17,7 +20,7 @@ if(process.platform === 'win32'){
 }
 
 mongoose.connection.on('connected',() => {
-  console.log(`Mongoose connected to ${mongoDbUri}`);  
+  console.log(`Mongoose connected to ${dbUri}`);  
 });
 
 
