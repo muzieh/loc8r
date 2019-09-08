@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ctrlLocations = require('../controllers/locations');
-const ctrlReviews = requrie('../controllers/reviews');
+const ctrlReviews = require('../controllers/reviews');
 
 
 router
