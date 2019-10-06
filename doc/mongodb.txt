@@ -31,3 +31,5 @@ db.locations.update({name:'Starcups'}, {
             reviewText: "What a great place."
         }
 }});
+
+heroku config:set NAME=value
