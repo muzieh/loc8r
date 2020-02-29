@@ -51,22 +51,41 @@ const locationsListByDistance = async (req, res) => {
             .status(404)
             .json({"message: ": err.toString()});
     }
-    
-    // Loc
-    //     .find()
-    //     .exec((err, locations) => {
-    //         res
-    //             .status(200)
-    //             .json({
-    //                 "status": "success",
-    //                 "locations": locations
-    //             });
-    //     });
 };
 const locationsCreate = (req, res) => {
-    res
-        .status(401)
-        .json({"status": "success"})
+    const location = {
+        name : req.body.name,
+        address: req.body.address,
+        facilities: req.body.facilities.split(','),
+        coords: {
+            type: "Point",
+            coordinates: [
+                parseFloat(req.body.lng),
+                parseFloat(req.body.lat)
+            ]
+        },
+        openingTimes:[
+            {
+                days: req.body.days2,
+                opening: req.body.opening2,
+                closing: req.body.closing2,
+                closed: req.body.closed2,
+            }
+        ]
+    }
+    
+    Loc.create(location, (err, location) => {
+        if(err) {
+            res
+                .status(400)
+                .json(err);
+        } else {
+            res
+                .status(201)
+                .json(location);
+            
+        }
+    });
 };
 
 const locationsReadOne = (req, res) => {
