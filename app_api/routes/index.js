@@ -3,6 +3,9 @@ const router = express.Router();
 const ctrlLocations = require('../controllers/locations');
 const ctrlReviews = require('../controllers/reviews');
 
+router
+    .route('/test/:locationid/:reviewid')
+    .get(ctrlLocations.test);
 
 router
     .route('/locations')
