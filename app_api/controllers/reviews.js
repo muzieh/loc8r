@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Loc = mongoose.model('Location');
 
-const reviewsUpdateOne = (req, res) => {};
 const reviewsDeleteOne = (req, res) => {};
 
 const reviewsReadOne = (req, res) => {
@@ -115,8 +114,60 @@ const reviewsCreate = (req, res) => {
             .status(404)
             .json({message: "location not found"});
     }
-    
-    
+};
+
+const reviewsUpdateOne = (req, res) => {
+    if(!req.params.locationid || !req.params.reviewid) {
+        res
+            .status(404)
+            .json({message: "not found, locationid and reviewid mandatory"})
+    }
+    Loc
+        .findById(req.params.locationid)
+        .select('reviews')
+        .exec((err, location) => {
+            if(!location) {
+                res
+                    .status(404)
+                    .json({message: "location not found"});
+                
+            } else if(err) {
+                res
+                    .status(400)
+                    .json({message: err.toString()});
+            }
+            if(location.reviews || location.reviews.length > 0) {
+               const thisReview = location.reviews.id(req.params.reviewid); 
+               if(!thisReview) {
+                   res
+                       .status(404)
+                       .json({message: "review not found" });
+               } else {
+                   const { author, rating, reviewText } = req.body;
+                   thisReview.author = author;
+                   thisReview.rating = rating;
+                   thisReview.reviewText = reviewText;
+                   location.save((err, location) => {
+                       if(err) {
+                           res
+                               .status(400)
+                               .json({message: err.toString()})
+                       } else {
+                           updateAverageRating(location._id);
+                           res
+                               .status(200)
+                               .json(thisReview);
+                       }
+                   })
+               }
+            } else {
+                res
+                    .status(404)
+                    .json({message: "no reviews to update"});
+            }
+            
+
+        })
 };
 
 module.exports = {

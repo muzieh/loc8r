@@ -23,7 +23,7 @@ router
     .post(ctrlReviews.reviewsCreate);
 
 router
-    .route('/location/:locationid/reviews/:reviewid')
+    .route('/locations/:locationid/reviews/:reviewid')
     .get(ctrlReviews.reviewsReadOne)
     .put(ctrlReviews.reviewsUpdateOne)
     .delete(ctrlReviews.reviewsDeleteOne);
