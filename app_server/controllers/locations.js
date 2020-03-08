@@ -1,4 +1,13 @@
-const homeList = (req, res) => {
+const axios = require('axios');
+const apiOptions = {
+    server: 'http://localhost:3000'
+};
+
+if(process.env.NODE_ENV === 'production') {
+    apiOptions.server = "https://heroku";   
+}
+
+const renderHomepage = (req, res, locations) => {
     res.render('locations-list', {
         title: 'Loc8r - find a place to work with wifi',
         pageHeader: {
@@ -6,28 +15,21 @@ const homeList = (req, res) => {
             strapline: 'Find places to work with wifi near you!'
         },
         sideMessage: 'Loc8r help you find places to work when out an doubt.',
-        locations: [
-            {
-               name: 'Starcups',
-               rating: 3,
-               address: '125 High Street, Reading, RG6 1PS',
-               distance: '100m',
-               facilities: [
-                   'Hot drinks', 'Food', 'Premium wifi'
-               ] 
-            },
-            {
-                name: 'Hot smot',
-                rating: 2,
-                address: '125 High Street, Reading, RG6 1PR',
-                distance: '500m',
-                facilities: [
-                    'Hot drinks', 'Food', 'Premium wifi', 'Pool'
-                ] 
-                
-            }
-        ]
-    });
+        locations: locations
+    });   
+};
+
+const homeList = async (req, res) => {
+    const url = `${apiOptions.server}/api/locations?lng=-0.969758&lat=51.559352`;
+    try {
+        const locationsResponse = await axios.get(url);
+        renderHomepage(req, res, locationsResponse.data);
+    } catch (err) {
+        res
+            .status(400)
+            .json({message: err.toString()});
+        
+    }
 };
 
 const locationInfo = (req, res) => {
