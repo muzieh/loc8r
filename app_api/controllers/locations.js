@@ -5,7 +5,7 @@ const locationsListByDistance = async (req, res) => {
     const lng = parseFloat(req.query.lng);
     const lat = parseFloat(req.query.lat);
     console.log(req.query);
-    if (!lng || !lat) {
+    if ((!lng && lng!==0) || (!lat && lat!==0)) {
         res
             .status(404)
             .json({"message": "lat, lng are required"});
