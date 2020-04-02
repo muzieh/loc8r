@@ -9,12 +9,12 @@ if (process.env.NODE_ENV === 'production') {
 
 const renderHomepage = (req, res, locations) => {
     let message;
-    if(!(locations instanceof Array)) {
+    if (!(locations instanceof Array)) {
         message = "API lookup error";
         locations = [];
     } else {
-        if(!locations.length) {
-            message = "No places found nerby";
+        if (!locations.length) {
+            message = "No places found nearby";
         }
     }
     res.render('locations-list', {
@@ -42,7 +42,7 @@ const formatDistance = distance => {
 };
 
 const homeList = async (req, res) => {
-    const lng=-0.969758;
+    const lng = -0.969758;
     const lat = 51.551342;
     const url = `${apiOptions.server}/api/locations?lng=${lng}&lat=${lat}`;
     try {
@@ -55,10 +55,10 @@ const homeList = async (req, res) => {
         });
         renderHomepage(req, res, data);
     } catch (err) {
-        if(err.response === 404) {
+        if (err.response === 404) {
             renderHomepage(req, res, []);
         } else {
-            renderHomepage(req, res, );
+            renderHomepage(req, res,);
         }
     }
 };
@@ -80,9 +80,28 @@ function renderDetailPage(req, res, location) {
     });
 }
 
+const showError = (req, res, status) => {
+    console.log(status);
+    let title = '';
+    let content = '';
+    if (status === 404) {
+        title = '404, page not found';
+        content = 'Oh dear. Looks like you can\'t find this page. Sorry.';
+    } else {
+        title = `${status}, something's gone wrong`;
+        content = 'Something, somewhere, has gone just a little bit wrong.';
+    }
+    res.status(status);
+    res.render('generic-text', {
+        title,
+        content
+    });
+};
+
+
 const locationInfo = async (req, res) => {
     const locationId = req.params.locationId;
-    if(!locationId) {
+    if (!locationId) {
         ;
     }
     const url = `${apiOptions.server}/api/locations/${locationId}`;
@@ -95,15 +114,23 @@ const locationInfo = async (req, res) => {
         };
         renderDetailPage(req, res, data);
     } catch (err) {
-        if(err.response === 404) {
-            renderDetailPage(req, res, {});
-        } else {
-            renderDetailPage(req, res,null);
-        }
+        showError(req, res, err.response.status);
     }
 };
 
+const renderReviewForm = (req, res) => {
+    res.render('new-review-form', {
+        title: 'Add review',
+        locationId: req.params.locationId
+    });
+};
+
 const addReview = (req, res) => {
+    renderReviewForm(req, res);
+};
+
+const doAddReview = (req, res) => {
+    console.dir(req.query);
     res.render('new-review-form', {title: 'Add review'});
 };
 
@@ -111,5 +138,6 @@ const addReview = (req, res) => {
 module.exports = {
     homeList,
     locationInfo,
-    addReview
+    addReview,
+    doAddReview
 };
