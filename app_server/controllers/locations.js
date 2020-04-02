@@ -63,57 +63,44 @@ const homeList = async (req, res) => {
     }
 };
 
-const locationInfo = (req, res) => {
+
+function renderDetailPage(req, res, location) {
     res.render('location-info', {
-        title: 'Location info',
+        title: location.name,
         pageHeader: {},
-        location: {
-            name: 'Starcups',
-            rating: 1,
-            address: '12 High Street, Reading, RG6 1PS',
-            distance: '100m',
-            facilities: [
-                'Hot drinks', 'Food', 'Premium wifi'
-            ],
-            coords: {lng: -0.19112150000000838, lat: 51.4168388},
-            opening: [{
-                days: 'Monday - Friday',
-                opening: '7:00am',
-                closing: '7:00pm',
-                closed: false,
-            }, {
-                days: 'Saturday',
-                opening: '8:00am',
-                closing: '5:00pm',
-                closed: false,
-            }, {
-                days: 'Sunday',
-                closed: true,
-            }]
-
-        },
-        reviews: [
-            {
-                author: 'Marian Opania',
-                createdOn: '14 February 2017',
-                rating: 1,
-                reviewText: 'Review 1'
-
-            },
-            {
-                author: 'Zieleniak',
-                createdOn: '30 July 2014',
-                rating: 2,
-                reviewText: 'Review 2'
-            }
-        ],
+        location: location,
+        reviews: location.reviews,
         sideText: {
             line1: 'Starcups is on Loc8r because it has accessible wifi and space to\n' +
                 '                sit down with your laptop and get some work done.',
             line2: 'If you\'ve been and you like it - or if you don\'t - please leave\n' +
                 '                a review to help other people just like you.',
-        }
+        },
+        googleMapsKey: "AIzaSyB8ZfaJ79cVCWKdpT0SNx_iXhLmvM75QN4"
     });
+}
+
+const locationInfo = async (req, res) => {
+    const locationId = req.params.locationId;
+    if(!locationId) {
+        ;
+    }
+    const url = `${apiOptions.server}/api/locations/${locationId}`;
+    try {
+        const locationResponse = await axios.get(url);
+        const data = locationResponse.data;
+        data.coords = {
+            lng: data.coords[0],
+            lat: data.coords[1]
+        };
+        renderDetailPage(req, res, data);
+    } catch (err) {
+        if(err.response === 404) {
+            renderDetailPage(req, res, {});
+        } else {
+            renderDetailPage(req, res,null);
+        }
+    }
 };
 
 const addReview = (req, res) => {

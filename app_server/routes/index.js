@@ -7,7 +7,7 @@ console.log(ctrlLocations.index);
 
 /* GET home page. */
 router.get('/', ctrlLocations.homeList);
-router.get('/location', ctrlLocations.locationInfo);
+router.get('/location/:locationId', ctrlLocations.locationInfo);
 router.get('/location/review/new', ctrlLocations.addReview);
 
 //router.get('/', ctrlOthers.index);
