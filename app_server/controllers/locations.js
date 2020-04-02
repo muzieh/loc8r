@@ -3,11 +3,20 @@ const apiOptions = {
     server: 'http://localhost:3000'
 };
 
-if(process.env.NODE_ENV === 'production') {
-    apiOptions.server = "https://heroku";   
+if (process.env.NODE_ENV === 'production') {
+    apiOptions.server = "https://heroku";
 }
 
 const renderHomepage = (req, res, locations) => {
+    let message;
+    if(!(locations instanceof Array)) {
+        message = "API lookup error";
+        locations = [];
+    } else {
+        if(!locations.length) {
+            message = "No places found nerby";
+        }
+    }
     res.render('locations-list', {
         title: 'Loc8r - find a place to work with wifi',
         pageHeader: {
@@ -15,29 +24,49 @@ const renderHomepage = (req, res, locations) => {
             strapline: 'Find places to work with wifi near you!'
         },
         sideMessage: 'Loc8r help you find places to work when out an doubt.',
-        locations: locations
-    });   
+        locations,
+        message
+    });
+};
+
+const formatDistance = distance => {
+    let thisDistance;
+    let unit = 'm';
+    if (distance > 1000) {
+        thisDistance = parseFloat(distance / 1000).toFixed(1);
+        unit = 'km';
+    } else {
+        thisDistance = Math.floor(distance);
+    }
+    return thisDistance + unit;
 };
 
 const homeList = async (req, res) => {
-    const url = `${apiOptions.server}/api/locations?lng=-0.969758&lat=51.559352`;
+    const lng=-0.969758;
+    const lat = 51.551342;
+    const url = `${apiOptions.server}/api/locations?lng=${lng}&lat=${lat}`;
     try {
         const locationsResponse = await axios.get(url);
-        renderHomepage(req, res, locationsResponse.data);
+        let data = locationsResponse.data.map(item => {
+            return {
+                ...item,
+                distance: formatDistance(item.distance)
+            };
+        });
+        renderHomepage(req, res, data);
     } catch (err) {
-        res
-            .status(400)
-            .json({message: err.toString()});
-        
+        if(err.response === 404) {
+            renderHomepage(req, res, []);
+        } else {
+            renderHomepage(req, res, );
+        }
     }
 };
 
 const locationInfo = (req, res) => {
     res.render('location-info', {
         title: 'Location info',
-        pageHeader: {
-            
-        },
+        pageHeader: {},
         location: {
             name: 'Starcups',
             rating: 1,
@@ -61,7 +90,7 @@ const locationInfo = (req, res) => {
                 days: 'Sunday',
                 closed: true,
             }]
-            
+
         },
         reviews: [
             {
@@ -69,13 +98,13 @@ const locationInfo = (req, res) => {
                 createdOn: '14 February 2017',
                 rating: 1,
                 reviewText: 'Review 1'
-                
+
             },
             {
                 author: 'Zieleniak',
                 createdOn: '30 July 2014',
                 rating: 2,
-                reviewText: 'Review 2' 
+                reviewText: 'Review 2'
             }
         ],
         sideText: {
