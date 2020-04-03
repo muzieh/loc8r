@@ -7,8 +7,11 @@ console.log(ctrlLocations.index);
 
 /* GET home page. */
 router.get('/', ctrlLocations.homeList);
-router.get('/location', ctrlLocations.locationInfo);
-router.get('/location/review/new', ctrlLocations.addReview);
+router.get('/location/:locationId', ctrlLocations.locationInfo);
+router
+    .route('/location/:locationId/review/new')
+    .get(ctrlLocations.addReview)
+    .post(ctrlLocations.doAddReview);
 
 //router.get('/', ctrlOthers.index);
 
