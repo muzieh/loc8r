@@ -22,7 +22,6 @@ const locationsListByDistance = async (req, res) => {
         key: "coords",
         spherical: true,
         maxDistance: 20000,
-        limit: 10
     };
 
     try {
@@ -33,7 +32,11 @@ const locationsListByDistance = async (req, res) => {
             }
         };
 
-        const result = await Loc.aggregate([geoNear]);
+        const limit = {
+            $limit: 10
+        };
+
+        const result = await Loc.aggregate([geoNear, limit]);
         const locations = result.map(result => {
             return {
                 id: result._id,
