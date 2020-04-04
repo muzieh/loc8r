@@ -1,10 +1,11 @@
 const axios = require('axios');
+
 const apiOptions = {
     server: 'http://localhost:3000'
 };
 
 if (process.env.NODE_ENV === 'production') {
-    apiOptions.server = "https://heroku";
+    apiOptions.server = process.env.API_URI;
 }
 
 const renderHomepage = (req, res, locations) => {
