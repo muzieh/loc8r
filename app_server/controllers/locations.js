@@ -98,40 +98,72 @@ const showError = (req, res, status) => {
     });
 };
 
+async function getLocationInfo(locationId) {
+    const url = `${apiOptions.server}/api/locations/${locationId}`;
+    const locationResponse = await axios.get(url);
+    const location = locationResponse.data;
+    location.coords = {
+        lng: location.coords[0],
+        lat: location.coords[1]
+    };
+    return location;
+}
 
 const locationInfo = async (req, res) => {
-    const locationId = req.params.locationId;
-    if (!locationId) {
-        ;
-    }
-    const url = `${apiOptions.server}/api/locations/${locationId}`;
+    const { locationId } = req.params;
     try {
-        const locationResponse = await axios.get(url);
-        const data = locationResponse.data;
-        data.coords = {
-            lng: data.coords[0],
-            lat: data.coords[1]
-        };
-        renderDetailPage(req, res, data);
+        const location = await getLocationInfo(locationId);
+        renderDetailPage(req, res, location);
     } catch (err) {
         showError(req, res, err.response.status);
     }
 };
 
-const renderReviewForm = (req, res) => {
-    res.render('new-review-form', {
-        title: 'Add review',
-        locationId: req.params.locationId
+const renderReviewForm = (req, res, location) => {
+    const {name, id} = location;
+    res.render('location-review-form', {
+        title: `Review ${name} on Loc8r`,
+        pageHeader: `Review ${name}`,
+        locationId: id,
+        error: req.query.err
     });
 };
 
-const addReview = (req, res) => {
-    renderReviewForm(req, res);
+const addReview = async (req, res) => {
+    const {locationId} = req.params;
+    try {
+        const location = await getLocationInfo(locationId);
+        renderReviewForm(req, res, location);
+    } catch (exp) {
+        showError(req, res, exp.response.status);
+    }
 };
 
-const doAddReview = (req, res) => {
-    console.dir(req.query);
-    res.render('new-review-form', {title: 'Add review'});
+const doAddReview = async (req, res) => {
+    const locationId = req.params.locationId;
+    const reviewData = {
+        author: req.body.name,
+        rating: parseInt(req.body.rating),
+        reviewText: req.body.review
+    };
+
+    if (!reviewData.author || !reviewData.rating || !reviewData.reviewText) {
+        res.redirect(`/location/${locationId}/review/new?err=val`);
+        return;
+    }
+
+    const url = `${apiOptions.server}/api/locations/${locationId}/reviews`;
+    try {
+        const response = await axios.post(url, reviewData);
+        res.redirect(`/location/${locationId}`);
+    } catch (exp) {
+        const {status, data: {name}} = exp.response;
+        if(status === 400 && name && name == "ValidationError") {
+            res.redirect(`/location/${locationId}/review/new?err=val`);
+        } else {
+            showError(req, res, exp.response.status);
+        }
+    }
 };
 
 
