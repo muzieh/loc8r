@@ -58,6 +58,7 @@ const homeList = async (req, res) => {
     } catch (err) {
         console.log('home List error');
         console.log(err);
+        console.dir(err);
         if (err.response === 404) {
             renderHomepage(req, res, []);
         } else {

@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const Loc = mongoose.model('Location');
 
 const locationsListByDistance = async (req, res) => {
-    console.log('API Locations by distance ');
     const lng = parseFloat(req.query.lng);
     const lat = parseFloat(req.query.lat);
     console.log(req.query);
@@ -48,13 +47,10 @@ const locationsListByDistance = async (req, res) => {
                 distance: `${result.distance.calculated.toFixed()}`
             };
         });
-        console.log('Locations be distance before 200');
         res
             .status(200)
             .json(locations);
     } catch (err) {
-        console.log('Locations be distance err');
-        console.log(err);
         res
             .status(404)
             .json({"message: ": err.toString()});
