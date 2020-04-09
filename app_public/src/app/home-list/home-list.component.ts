@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { Loc8rDataService } from "../loc8r-data.service";
+import {GeolocationService} from "../geolocation.service";
 
 export class Location {
   id: string;
@@ -18,37 +19,39 @@ export class Location {
 
 export class HomeListComponent implements OnInit {
 
-  constructor(private loc8rDataService: Loc8rDataService) {
+  constructor(private loc8rDataService: Loc8rDataService, private geolocationService: GeolocationService) {
   }
-
   ngOnInit() {
-    this.getLocations();
+    this.getPosition();
   }
 
-  name: string = "Star puc";
   locations: Location[];
+  message: string = "";
 
-  private getLocations() : void {
+  private getPosition() : void {
+    this.message = 'Getting geolocation service ...';
+    this.geolocationService.getPosition(
+      this.getLocations.bind(this),
+      this.showError.bind(this),
+      this.noGeo.bind(this));
+  }
+
+  private getLocations(position: any) : void {
+    this.message = 'Searching for nerby places';
     this.loc8rDataService
       .getLocations()
-      .then(foundLocations => this.locations = foundLocations)
+      .then(foundLocations => {
+        this.message = foundLocations.length > 0 ? '' : 'No location found';
+        this.locations = foundLocations
+      });
   }
 
-  locations1: Location[] = [{
-    id: "52ef3a9f79c44a86710fe7f5",
-    name: "Star pucc",
-    distance: 1121.83,
-    address: "Cossmic allay 13",
-    rating: 2.3,
-    facilities: ["cofee", "toilet", "snack bar"]
-  }, {
-    id: "52ef3a9f79c44a86710fe7f7",
-    name: "2.30 Works",
-    distance: 11.83,
-    address: "43 Mosta",
-    rating: 5,
-    facilities: ["toilet", "snack bar", "free coffe", "photocopy"]
-  }];
+  private showError(error: any) : void {
+    this.message = error.message;
+  }
 
+  private noGeo() : void {
+    this.message = 'Geolocation not supported by this browser';
+  }
 
 }

@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'app_public')));
 //app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')));
 
 app.use('/api', (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
+  res.header('Access-Control-Allow-Origin', 'https://localhost:4200');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });

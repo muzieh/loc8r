@@ -6,6 +6,9 @@ import { HomeListComponent } from './home-list/home-list.component';
 import { DistancePipe } from './distance.pipe';
 import { FrameworkComponent } from './framework/framework.component';
 import { AboutComponent } from './about/about.component';
+import { HomepageComponent } from './homepage/homepage.component';
+import { PageHeaderComponent } from './page-header/page-header.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 
 @NgModule({
@@ -13,14 +16,17 @@ import { AboutComponent } from './about/about.component';
     HomeListComponent,
     DistancePipe,
     FrameworkComponent,
-    AboutComponent
+    AboutComponent,
+    HomepageComponent,
+    PageHeaderComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot([{
       path: "",
-      component: HomeListComponent
+      component: HomepageComponent
     }, {
       path: "about",
       component: AboutComponent
