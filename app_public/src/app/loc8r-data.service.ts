@@ -30,4 +30,14 @@ export class Loc8rDataService {
     console.error('Error something wrong', error);
     return Promise.reject(error.message || error);
   }
+
+  getLocationById(locationId: string) :Promise<Location> {
+    const url = `${this.baseApiUrl}/locations/${locationId}`;
+    console.log(`getLocation ${url}`);
+    return this.http
+      .get(url)
+      .toPromise()
+      .then(response => response as Location)
+      .catch(this.handleError);
+  }
 }
