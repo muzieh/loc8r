@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders} from "@angular/common/http";
-import { Location } from "./home-list/home-list.component";
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {environment} from "../environments/environment";
+import {Location, Review} from "./location";
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +9,10 @@ import { Location } from "./home-list/home-list.component";
 
 export class Loc8rDataService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
-  private baseApiUrl = "http://localhost:3000/api";
+  private baseApiUrl = environment.baseApiUrl;//"http://localhost:3000/api";
 
   public getLocations(lat: number, lng: number): Promise<Location[]> {
     // const lng: number = -0.969758;
@@ -26,18 +28,27 @@ export class Loc8rDataService {
   }
 
 
-  private handleError(error: any) : Promise<any> {
+  private handleError(error: any): Promise<any> {
     console.error('Error something wrong', error);
     return Promise.reject(error.message || error);
   }
 
-  getLocationById(locationId: string) :Promise<Location> {
+  getLocationById(locationId: string): Promise<Location> {
     const url = `${this.baseApiUrl}/locations/${locationId}`;
     console.log(`getLocation ${url}`);
     return this.http
       .get(url)
       .toPromise()
       .then(response => response as Location)
+      .catch(this.handleError);
+  }
+
+  addReviewByLocationId(locationId: string, review: Review): Promise<Review> {
+    const url = `${this.baseApiUrl}/locations/${locationId}/reviews`;
+    return this.http
+      .post(url, review)
+      .toPromise()
+      .then(review => review as Review)
       .catch(this.handleError);
   }
 }

@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Location} from "../home-list/home-list.component";
+import {Loc8rDataService} from "../loc8r-data.service";
+import {Location, Review} from "../location";
 
 @Component({
   selector: 'app-location-details',
@@ -10,16 +11,47 @@ export class LocationDetailsComponent implements OnInit {
   @Input() location: Location;
 
   public googleApiKey: string = "AIzaSyB8ZfaJ79cVCWKdpT0SNx_iXhLmvM75QN4";
-  public newReview = {
+  public newReview: Review = {
     author: '',
     rating: 5,
     reviewText: ''
   };
   public formVisible: boolean = false;
 
-  constructor() { }
+  constructor(private loc8rDataService: Loc8rDataService) { }
 
   ngOnInit() {
   }
 
+  private formIsValid(): boolean {
+    if(this.newReview.reviewText && this.newReview.author && this.newReview.rating) {
+      return true;
+    }
+    return false;
+  }
+
+  onReviewSubmit() {
+    this.formError = '';
+    if(this.formIsValid()) {
+      console.log(this.newReview);
+      this.loc8rDataService.addReviewByLocationId(this.location._id, this.newReview)
+        .then((review: Review) => {
+          console.log("review saved");
+          let reviews = this.location.reviews.slice(0);
+          reviews.unshift(review);
+          this.location.reviews = reviews;
+          this.resetAndHideRevewForm();
+        });``
+    } else {
+      this.formError = 'All fields are required';
+    }
+  }
+  public formError: string;
+
+  private resetAndHideRevewForm() {
+    this.formVisible = false;
+    this.newReview.author = '';
+    this.newReview.rating = 5;
+    this.newReview.reviewText = '';
+  }
 }

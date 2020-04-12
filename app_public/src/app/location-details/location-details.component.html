@@ -1,3 +1,8 @@
+<!--
+<p>
+{{location | json}}
+</p>
+-->
 <div class="row">
   <div class="col-12 col-md-6">
     <app-rating-stars [rating]="location.rating"></app-rating-stars>
@@ -29,7 +34,7 @@
       <div class="card-block">
         <h2 class="card-title">Location map</h2>
         <img
-          src="http://maps.googleapis.com/maps/api/staticmap?center={{location.coords[1]}},{{location.coords[0]}}&zoom=17&size=400x350&sensor=false&markers={{location.coords[1]}},{{location.coords[0]}}&scale=0.1&key={{googleApiKey}}"
+          src="http://maps.googleapis.com/maps/api/staticmap?center={{location.coords[1]}},{{location.coords[0]}}&zoom=15&size=400x350&sensor=false&markers={{location.coords[1]}},{{location.coords[0]}}&scale=1.8&key={{googleApiKey}}"
           alt="" class="img-fluid rounded"></div>
     </div>
   </div>
@@ -38,41 +43,47 @@
   <div class="col-12">
     <div class="card card-primary review-card">
       <div class="card-block">
+<!--
         <a href="/location/{{location.id}}/review/new" class="btn btn-primary float-right">Add review</a>
+-->
+        <button (click)="formVisible=true" class="btn btn-primary float-right">Add review</button>
         <h2 class="card-title">Customer reviews</h2>
-        <div>
-          <form action="">
+        <div *ngIf="formVisible">
+          <form action="" (ngSubmit)="onReviewSubmit()">
             <hr>
             <h4>Add your review</h4>
+            <div *ngIf="formError" class="alert alert-danger" role="alert">
+              {{formError}}
+            </div>
             <div class="form-group row">
               <label for="name" class="col-sm-2 col-form-label">Name</label>
               <div class="col-sm-10">
-                <input id="name" name="name" required="required" class="form-control">
+                <input [(ngModel)]="newReview.author" id="name" name="name" required="required" class="form-control">
               </div>
             </div>
             <div class="form-group row">
               <label for="rating" class="col-sm-2 col-form-label">Rating</label>
               <div class="col-sm-10 col-md-2">
-                <select id="rating" name="rating" class="form-control">
-                  <option value="5">5</option>
-                  <option value="4">4</option>
-                  <option value="3">3</option>
-                  <option value="2">2</option>
-                  <option value="1">1</option>
+                <select [(ngModel)]="newReview.rating" id="rating" name="rating" class="form-control">
+                  <option [ngValue]="5">5</option>
+                  <option [ngValue]="4">4</option>
+                  <option [ngValue]="3">3</option>
+                  <option [ngValue]="2">2</option>
+                  <option [ngValue]="1">1</option>
                 </select>
               </div>
             </div>
             <div class="form-group row">
               <label for="review" class="col-sm-2 col-form-label">Review</label>
               <div class="col-sm-10">
-                  <textarea name="review" id="review" rows="5" class="form-control"></textarea>
+                  <textarea [(ngModel)]="newReview.reviewText" name="review" id="review" rows="5" class="form-control"></textarea>
               </div>
             </div>
             <div class="form-group row">
               <div class="col-12">
                 <button type="submit" class="btn btn-primary float-right"
                         style="margin-left:15px">Submit review</button>
-                <button type="button" class="btn btn-default float-right">Cancel</button>
+                <button (click)="formVisible=false" type="button" class="btn btn-default float-right">Cancel</button>
               </div>
             </div>
             <hr>
@@ -81,7 +92,7 @@
 
         <div *ngFor="let review of location.reviews | mostRecentFirst" class="row review">
           <div class="col-12 no-guters review-header">
-            <app-rating-stars [rating]="review.rating"></app-rating-stars>
+            <app-rating-stars [rating]="review.rating" class="mr-2"></app-rating-stars>
             <span class="reviewAuthor mr-3">{{review.author}}</span>
             <small class="reviewTimestamp">{{review.createdOn | date: 'd MMMM yyyy'}}</small>
           </div>
@@ -93,6 +104,3 @@
     </div>
   </div>
 </div>
-<p>
-  {{location | json}}
-</p>
