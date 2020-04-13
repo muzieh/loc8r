@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const readLine = require('readline');
 require('./locations');
+require('./users');
 
 let dbUri = "mongodb://localhost/Loc8r";
 if (process.env.NODE_ENV === 'production') {
