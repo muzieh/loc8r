@@ -1,7 +1,10 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../environments/environment";
 import {Location, Review} from "./location";
+import {AuthResponse} from "./authresponse";
+import {User} from "./user";
+import {BROWSER_STORAGE} from "./storage";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +12,9 @@ import {Location, Review} from "./location";
 
 export class Loc8rDataService {
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    @Inject(BROWSER_STORAGE) private storage: Storage) {
   }
 
   private baseApiUrl = environment.baseApiUrl;//"http://localhost:3000/api";
@@ -45,10 +50,32 @@ export class Loc8rDataService {
 
   addReviewByLocationId(locationId: string, review: Review): Promise<Review> {
     const url = `${this.baseApiUrl}/locations/${locationId}/reviews`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.storage.getItem('loc8r-token')}`
+      })
+    };
     return this.http
-      .post(url, review)
+      .post(url, review, httpOptions)
       .toPromise()
       .then(review => review as Review)
+      .catch(this.handleError);
+  }
+
+  login(user: User): Promise<AuthResponse> {
+    return this.makeAuthApiCall('login', user);
+  }
+
+  register(user: User): Promise<AuthResponse> {
+    return this.makeAuthApiCall('register', user);
+  }
+
+  private makeAuthApiCall(urlPath: string, user: User): Promise<AuthResponse> {
+    const url: string =`${this.baseApiUrl}/${urlPath}` ;
+    return this.http
+      .post(url, user)
+      .toPromise()
+      .then(response => response as AuthResponse)
       .catch(this.handleError);
   }
 }
